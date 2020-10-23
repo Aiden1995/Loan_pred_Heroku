@@ -1,16 +1,20 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[11]:
 
 
 # Dependencies
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from sklearn.externals import joblib
 import traceback
 import pandas as pd
+import joblib
 import os
+classifier = joblib.load('classification_model.pkl') # Load "model.pkl"
+print ('Model loaded')
+model_columns = joblib.load('model_columns.pkl') # Load "model_columns.pkl"
+print ('Model columns loaded')
 
 
 # In[ ]:
@@ -20,7 +24,7 @@ import os
 # Your API definition
 app = Flask(__name__)
 
-@app.route('/predict', methods=['POST'])
+@app.route('/', methods=['POST'])
 def predict():
     if classifier:
         try:
@@ -30,7 +34,7 @@ def predict():
             #json_ = request.json
             #print(json_)
             #query = pd.get_dummies(pd.DataFrame(json_))
-            #query = query.reindex(columns=model_columns, fill_value=0)
+            data_df = data_df.reindex(columns=model_columns, fill_value=0)
             print(data_df)
             prediction = classifier.predict(data_df)
             
@@ -45,11 +49,7 @@ def predict():
         return ('No model here to use')
 
 if __name__ == '__main__':
-    classifier = joblib.load("classification_model.pkl") # Load "model.pkl"
-    print ('Model loaded')
-    model_columns = joblib.load("model_columns.pkl") # Load "model_columns.pkl"
-    print ('Model columns loaded')
-    app.run(port = 5000, use_reloader=False,debug=True)
+    app.run(port = 5000,use_reloader=False, debug=True)
     #app.run(host='127.0.0.1', use_reloader=False,port=8080, debug=True)
 
 
