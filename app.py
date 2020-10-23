@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[11]:
+# In[1]:
 
 
 # Dependencies
@@ -49,7 +49,8 @@ def predict():
         return ('No model here to use')
 
 if __name__ == '__main__':
-    app.run(port = 5000,use_reloader=False, debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(port = port,use_reloader=False, debug=True)
     #app.run(host='127.0.0.1', use_reloader=False,port=8080, debug=True)
 
 
